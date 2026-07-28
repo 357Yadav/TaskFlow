@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { login } from "../services/authService";
 import { toast } from "react-toastify";
 
 function Login() {
-
-  const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -24,35 +21,33 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     setLoading(true);
 
     try {
+      const response = await login(user);
 
-      await login(user);
+      console.log("Login Response:", response);
+      console.log("Token:", localStorage.getItem("token"));
 
       toast.success("Login Successful!");
 
-      navigate("/dashboard");
+      setTimeout(() => {
+        window.location.replace("/dashboard");
+      }, 500);
 
     } catch (err) {
+      console.error(err);
 
       toast.error("Invalid Email or Password!");
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   return (
-
     <div className="container">
-
       <div className="card">
 
         <h1>🚀 TaskFlow Login</h1>
@@ -86,9 +81,8 @@ function Login() {
           >
             <input
               type="checkbox"
-              onChange={() =>
-                setShowPassword(!showPassword)
-              }
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
             />
 
             <span style={{ marginLeft: "8px" }}>
@@ -96,10 +90,7 @@ function Login() {
             </span>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-          >
+          <button type="submit" disabled={loading}>
             {loading ? "Logging In..." : "Login"}
           </button>
 
@@ -112,11 +103,8 @@ function Login() {
         </Link>
 
       </div>
-
     </div>
-
   );
-
 }
 
 export default Login;

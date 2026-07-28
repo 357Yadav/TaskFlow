@@ -4,16 +4,20 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
-function App() {
-
+function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
 
+  if (!token) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+}
+
+function App() {
   return (
-
     <BrowserRouter>
-
       <Routes>
-
         <Route path="/" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
@@ -21,20 +25,16 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            token ? (
+            <ProtectedRoute>
               <Dashboard />
-            ) : (
-              <Navigate to="/" />
-            )
+            </ProtectedRoute>
           }
         />
 
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-
     </BrowserRouter>
-
   );
-
 }
 
 export default App;

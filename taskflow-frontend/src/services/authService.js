@@ -8,7 +8,11 @@ export const register = async (user) => {
 export const login = async (user) => {
   const response = await api.post("/auth/login", user);
 
-  localStorage.setItem("token", response.data.token);
+  console.log(response.data);
+
+  if (response.data.token) {
+    localStorage.setItem("token", response.data.token);
+  }
 
   return response.data;
 };
