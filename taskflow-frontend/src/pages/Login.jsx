@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/authService";
 import { toast } from "react-toastify";
 
 function Login() {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const [user, setUser] = useState({
@@ -34,12 +35,10 @@ function Login() {
       toast.success("Login Successful!");
 
       setTimeout(() => {
-        window.location.replace("/dashboard");
+        navigate("/dashboard", { replace: true });
       }, 500);
-
     } catch (err) {
       console.error(err);
-
       toast.error("Invalid Email or Password!");
     } finally {
       setLoading(false);
@@ -49,11 +48,9 @@ function Login() {
   return (
     <div className="container">
       <div className="card">
-
         <h1>🚀 TaskFlow Login</h1>
 
         <form onSubmit={handleSubmit}>
-
           <input
             type="email"
             name="email"
@@ -72,19 +69,11 @@ function Login() {
             required
           />
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "15px",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
             <input
               type="checkbox"
-              checked={showPassword}
               onChange={() => setShowPassword(!showPassword)}
             />
-
             <span style={{ marginLeft: "8px" }}>
               Show Password
             </span>
@@ -93,7 +82,6 @@ function Login() {
           <button type="submit" disabled={loading}>
             {loading ? "Logging In..." : "Login"}
           </button>
-
         </form>
 
         <br />
@@ -101,7 +89,6 @@ function Login() {
         <Link to="/register">
           Don't have an account? Register
         </Link>
-
       </div>
     </div>
   );
