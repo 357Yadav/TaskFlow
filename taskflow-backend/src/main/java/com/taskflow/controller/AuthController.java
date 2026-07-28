@@ -10,22 +10,24 @@ import com.taskflow.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
     private UserService userService;
 
-    // Register User
     @PostMapping("/register")
     public String register(@RequestBody RegisterRequest request) {
 
         System.out.println("========== REGISTER API HIT ==========");
+        System.out.println("Email : " + request.getEmail());
 
-        return userService.register(request);
+        String response = userService.register(request);
+
+        System.out.println("========== REGISTER SUCCESS ==========");
+
+        return response;
     }
 
-    // Login User
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest request) {
 
@@ -38,5 +40,4 @@ public class AuthController {
 
         return response;
     }
-
 }
